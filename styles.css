@@ -1,232 +1,597 @@
-/* =========================================================
-   Activity #2 — Styling with CSS
-   This stylesheet implements Steps 2–6 from the assignment.
-   (Base reset + container + headings/text + lists + image + links)
-   ========================================================= */
+/* ============================================================================
+   Activity #2 — CSS (Everything Centered Edition)
+   Scope: Base reset + container + headings/text + lists + image + links
+          + dark mode + grid + cards + buttons + forms + tables + alerts
+          + accessibility/focus + reduced motion + print — ALL CENTERED
+   ============================================================================ */
 
-/* -------------------------
-   Step 2: Page background & base font
-   ------------------------- */
+/* ---------------------------------
+   Design Tokens: Light Theme (Default)
+   --------------------------------- */
 :root {
-  /* Friendly, accessible color system */
-  --bg: #f7f9fc;              /* light page background */
-  --surface: #ffffff;          /* cards/containers */
-  --text: #1f2937;             /* primary text */
-  --muted: #6b7280;            /* secondary text */
-  --brand: #2563eb;            /* link / accent (blue) */
-  --brand-strong: #1e40af;     /* darker hover state */
-  --border: #e5e7eb;           /* subtle borders */
-  --shadow: 0 8px 20px rgba(2, 6, 23, 0.08);
+  /* Color Tokens */
+  --bg:            #f7f9fc;
+  --surface:       #ffffff;
+  --surface-2:     #fafbff;
+  --text:          #0f172a;
+  --muted:         #64748b;
+  --brand:         #2563eb;
+  --brand-strong:  #1e40af;
+  --border:        #e5e7eb;
+  --success:       #16a34a;
+  --warning:       #d97706;
+  --danger:        #dc2626;
+  --info:          #0ea5e9;
+
+  /* Elevation */
+  --shadow-sm:     0 2px 6px rgba(15, 23, 42, 0.08);
+  --shadow:        0 8px 20px rgba(2, 6, 23, 0.08);
+  --shadow-lg:     0 14px 36px rgba(2, 6, 23, 0.12);
+
+  /* Focus */
+  --focus-ring:    0 0 0 3px rgba(37, 99, 235, 0.35);
+
+  /* Radii */
+  --radius-xs:     6px;
+  --radius-sm:     10px;
+  --radius:        14px;
+  --radius-lg:     18px;
+  --radius-pill:   999px;
+
+  /* Spacing Scale */
+  --space-0:       0;
+  --space-1:       0.25rem;
+  --space-2:       0.5rem;
+  --space-3:       0.75rem;
+  --space-4:       1rem;
+  --space-5:       1.25rem;
+  --space-6:       1.5rem;
+  --space-8:       2rem;
+  --space-10:      2.5rem;
+  --space-12:      3rem;
+
+  /* Typography */
+  --font-sans:     Arial, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
+  --font-mono:     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+
+  /* Fluid Type */
+  --text-base:     clamp(1rem, 0.35vw + 0.9rem, 1.125rem);
+  --text-sm:       clamp(0.9rem, 0.2vw + 0.85rem, 1rem);
+  --text-lg:       clamp(1.05rem, 0.45vw + 0.95rem, 1.2rem);
+  --h1:            clamp(1.9rem, 2.5vw + 1rem, 2.8rem);
+  --h2:            clamp(1.3rem, 1.2vw + 1rem, 1.9rem);
+  --h3:            clamp(1.1rem, 0.9vw + 1rem, 1.3rem);
+
+  /* Container Widths */
+  --container:       960px;
+  --container-wide:  1200px;
+  --container-narrow: 720px;
 }
 
+/* Dark Theme */
+:root[data-theme="dark"] {
+  --bg:           #0b1220;
+  --surface:      #0f172a;
+  --surface-2:    #111827;
+  --text:         #e5e7eb;
+  --muted:        #9ca3af;
+  --brand:        #60a5fa;
+  --brand-strong: #3b82f6;
+  --border:       #1f2937;
+  --shadow-sm:    0 2px 6px rgba(0, 0, 0, 0.35);
+  --shadow:       0 10px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg:    0 18px 44px rgba(0, 0, 0, 0.55);
+  --focus-ring:   0 0 0 3px rgba(96, 165, 250, 0.4);
+}
+
+/* Honor OS preference if no explicit toggle is set */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg:           #0b1220;
+    --surface:      #0f172a;
+    --surface-2:    #111827;
+    --text:         #e5e7eb;
+    --muted:        #9ca3af;
+    --brand:        #60a5fa;
+    --brand-strong: #3b82f6;
+    --border:       #1f2937;
+    --shadow-sm:    0 2px 6px rgba(0, 0, 0, 0.35);
+    --shadow:       0 10px 24px rgba(0, 0, 0, 0.45);
+    --shadow-lg:    0 18px 44px rgba(0, 0, 0, 0.55);
+    --focus-ring:   0 0 0 3px rgba(96, 165, 250, 0.4);
+  }
+}
+
+/* ---------------------------------
+   Base Reset & Accessibility
+   --------------------------------- */
 *,
 *::before,
-*::after {
-  box-sizing: border-box;
-}
+*::after { box-sizing: border-box; }
 
-html {
-  /* Improves font rendering and line-height rhythm */
-  font-size: 100%;
-  -webkit-text-size-adjust: 100%;
-}
+html { font-size: 100%; -webkit-text-size-adjust: 100%; }
 
 body {
-  margin: 0;                             /* remove default margin */
-  padding: 1rem;                         /* breathing room at edges */
-  font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, sans-serif;
+  margin: 0;
+  padding: var(--space-4);
+  font-family: var(--font-sans);
   color: var(--text);
   background: var(--bg);
-  line-height: 1.6;                      /* improve readability */
+  line-height: 1.65;
+  font-size: var(--text-base);
+
+  /* Center the entire page layout */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* keep header visible; use center to vertically center */
+  text-align: center;      /* GLOBAL CENTERING: applies to all text by default */
 }
 
-/* Provide a pleasant reading width for long text */
-p {
-  max-width: 65ch;
-  color: var(--text);
+/* Focus visibility */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+  transition: box-shadow 120ms ease;
 }
 
-/* -------------------------
-   Step 3: Main container
-   (Remember to wrap your body content in: <div class="container"> ... </div>)
-   ------------------------- */
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Skip link (still centered when visible) */
+.skip-link {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -9999px;
+  width: auto;
+  height: auto;
+  overflow: hidden;
+}
+.skip-link:focus-visible {
+  top: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  background: var(--brand);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  z-index: 1000;
+}
+
+/* ---------------------------------
+   Container (centered)
+   --------------------------------- */
 .container {
-  max-width: 960px;                      /* limit width for readability */
-  margin: 2rem auto;                     /* center on page */
-  background: var(--surface);            /* white card */
-  padding: 2rem 2.25rem;                 /* internal spacing */
-  border-radius: 14px;                   /* rounded corners */
-  box-shadow: var(--shadow);             /* soft shadow */
-  border: 1px solid var(--border);       /* subtle edge definition */
-}
+  max-width: var(--container);
+  margin: var(--space-8) auto;
+  background: var(--surface);
+  padding: var(--space-8);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 
-/* Add consistent spacing between major sections */
+  /* Explicit centering */
+  text-align: center;
+}
+.container.narrow { max-width: var(--container-narrow); }
+.container.wide   { max-width: var(--container-wide); }
+
 section + section {
-  margin-top: 2rem;
-  padding-top: 0.5rem;
+  margin-top: var(--space-8);
+  padding-top: var(--space-2);
   border-top: 1px dashed var(--border);
 }
 
-/* -------------------------
-   Step 4: Headings & text
-   ------------------------- */
-h1,
-h2,
-h3 {
+/* ---------------------------------
+   Typography (centered)
+   --------------------------------- */
+h1, h2, h3 {
   line-height: 1.25;
-  margin: 0; /* reset */
+  margin: 0;
   color: var(--text);
+  text-align: center;
 }
 
-/* Make the main heading stand out with a color and spacing */
 h1 {
-  color: var(--brand);                   /* accent color per instructions */
-  font-size: clamp(1.8rem, 2.5vw + 1rem, 2.6rem);
-  letter-spacing: 0.3px;
-  margin-bottom: 0.75rem;                /* spacing under h1 */
+  color: var(--brand);
+  font-size: var(--h1);
+  letter-spacing: 0.2px;
+  margin-bottom: var(--space-3);
 }
 
-/* Secondary heading spacing */
 h2 {
-  font-size: clamp(1.25rem, 1.2vw + 1rem, 1.75rem);
-  color: var(--text);
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;                 /* spacing under h2 */
+  font-size: var(--h2);
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-2);
 }
 
-/* Improve paragraph readability */
+h3 {
+  font-size: var(--h3);
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
 p {
-  font-size: 1rem;
-  margin: 0.5rem 0 1rem;
+  margin: var(--space-2) auto var(--space-4);
+  max-width: 65ch;
+  text-align: center;
 }
 
-/* Optional: small, muted helper text */
-.small,
-footer {
+.lead { font-size: var(--text-lg); }
+
+.small, .muted, footer {
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-sm);
 }
 
-/* -------------------------
-   Step 5: List section
-   ------------------------- */
-ul,
-ol {
-  padding-left: 1.25rem;                 /* a little left padding */
-  margin: 0.5rem 0 1rem;
+/* Quotes & Code (centered) */
+blockquote {
+  margin: var(--space-4) auto;
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-2);
+  border-left: 4px solid var(--brand);
+  border-radius: var(--radius-xs);
+  max-width: 65ch;
+  text-align: center;
+}
+code, kbd, pre, samp {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+}
+pre {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  overflow: auto;
+  margin: var(--space-4) auto;
+  text-align: center;
+  max-width: 100%;
 }
 
-li {
-  margin-bottom: 0.4rem;                 /* spacing between list items */
+/* ---------------------------------
+   Lists (centered; bullets inside)
+   --------------------------------- */
+ul, ol {
+  padding-left: 0;                 /* remove default indent */
+  list-style-position: inside;     /* center bullets/numbers with text */
+  margin: var(--space-2) auto var(--space-4);
+  text-align: center;
 }
+li { margin-bottom: 0.45rem; }
 
-/* Modern “check” list style (optional: add class="checklist" to your UL) */
+/* Checklist */
 .checklist {
   list-style: none;
   padding-left: 0;
 }
 .checklist li {
   position: relative;
-  padding-left: 1.6rem;
-  margin-bottom: 0.5rem;
+  padding-left: 0;   /* no left padding when centered */
+  margin-bottom: 0.6rem;
 }
 .checklist li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  top: 0.1rem;
+  content: "✓ ";
   color: var(--brand);
   font-weight: 700;
+  margin-right: 0.25rem;
 }
 
-/* -------------------------
-   Step 5 (image): Image styling
-   ------------------------- */
-/* Generic responsive image */
+/* ---------------------------------
+   Images & Media (centered)
+   --------------------------------- */
 img {
   max-width: 100%;
-  height: auto;                          /* responsive */
-  display: block;                        /* enables centering via margin */
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
-
-/* Centered, rounded “profile/featured” image */
-.figure,
-.img-center {
-  text-align: center;
-}
+.figure, .img-center { text-align: center; }
 
 .img-rounded {
-  border-radius: 12px;                   /* rounded corners */
-  border: 2px solid var(--border);       /* subtle border */
-  margin: 1rem auto;                     /* center horizontally */
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  margin: var(--space-4) auto;
   box-shadow: 0 4px 12px rgba(2, 6, 23, 0.06);
 }
-
-/* Circular avatar style (use class="img-avatar" for square images) */
 .img-avatar {
   width: 180px;
   height: 180px;
   object-fit: cover;
   border-radius: 50%;
   border: 3px solid var(--surface);
-  outline: 2px solid var(--brand);       /* accent ring */
-  margin: 1rem auto;
-  box-shadow: 0 6px 16px rgba(2, 6, 23, 0.10);
+  outline: 2px solid var(--brand);
+  margin: var(--space-4) auto;
+  box-shadow: 0 6px 16px rgba(2, 6, 23, 0.1);
+}
+.figure figcaption {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  margin-top: var(--space-2);
+  text-align: center;
 }
 
-/* -------------------------
-   Step 6: Link styling
-   ------------------------- */
+/* ---------------------------------
+   Links & Buttons (centered)
+   --------------------------------- */
 a {
-  color: var(--brand);                    /* link color */
-  text-decoration: none;                  /* remove underline by default */
+  color: var(--brand);
+  text-decoration: none;
   font-weight: 600;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 2px;
 }
-a:hover,
-a:focus-visible {
-  text-decoration: underline;             /* underline on hover */
+a:hover, a:focus-visible {
+  text-decoration: underline;
   color: var(--brand-strong);
 }
-a:active {
-  opacity: 0.9;
-}
+a:active { opacity: 0.9; }
 
-/* Optional: button-like link (add class="btn") */
-a.btn {
+.btn {
   display: inline-block;
+  border: 1px solid transparent;
   background: var(--brand);
   color: #fff;
   padding: 0.6rem 1rem;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   text-decoration: none;
-  transition: transform 120ms ease, background 120ms ease;
+  transition: transform 120ms ease, background 120ms ease, box-shadow 120ms ease;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  cursor: pointer;
+  text-align: center;
 }
-a.btn:hover,
-a.btn:focus-visible {
+.btn:hover, .btn:focus-visible {
   background: var(--brand-strong);
   transform: translateY(-1px);
 }
+.btn:active { transform: translateY(0); }
 
-/* -------------------------
-   Footer (mentioned in final checks)
-   ------------------------- */
+.btn-outline {
+  background: transparent;
+  color: var(--brand);
+  border-color: var(--brand);
+  box-shadow: none;
+}
+.btn-outline:hover, .btn-outline:focus-visible {
+  background: color-mix(in oklab, var(--brand) 12%, transparent);
+  color: #fff;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--brand);
+  border-color: transparent;
+  box-shadow: none;
+}
+.btn-ghost:hover, .btn-ghost:focus-visible {
+  background: color-mix(in oklab, var(--brand) 10%, transparent);
+  color: #fff;
+}
+
+.btn-sm { padding: 0.4rem 0.75rem; border-radius: var(--radius-xs); }
+.btn-lg { padding: 0.8rem 1.15rem; border-radius: var(--radius); }
+
+/* ---------------------------------
+   Layout Utilities (centered)
+   --------------------------------- */
+.stack { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
+.cluster { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-3); }
+
+.grid {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: center;  /* center items within their cells */
+}
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+@media (max-width: 800px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+/* ---------------------------------
+   Cards (centered content)
+   --------------------------------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: clip;
+  text-align: center;
+  width: 100%;
+}
+.card-header, .card-footer {
+  padding: var(--space-4) var(--space-5);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+  width: 100%;
+}
+.card-footer { border-top: 1px solid var(--border); border-bottom: none; }
+.card-body { padding: var(--space-5); text-align: center; }
+
+/* ---------------------------------
+   Forms (centered)
+   --------------------------------- */
+form { width: 100%; }
+label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  text-align: center;
+}
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="password"],
+select,
+textarea {
+  width: min(680px, 100%);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  transition: box-shadow 120ms ease, border-color 120ms ease;
+  text-align: center; /* center input text */
+}
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  border-color: var(--brand);
+  box-shadow: var(--focus-ring);
+}
+input::placeholder, textarea::placeholder { color: var(--muted); text-align: center; }
+
+.field-help {
+  margin-top: 0.35rem;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.input-error { border-color: var(--danger) !important; }
+.error-text {
+  color: var(--danger);
+  font-size: var(--text-sm);
+  margin-top: 0.35rem;
+  text-align: center;
+}
+
+/* ---------------------------------
+   Tables (centered cells)
+   --------------------------------- */
+.table-wrap {
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  margin: 0 auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
+  background: var(--surface);
+  margin: 0 auto;
+  text-align: center;
+}
+thead th {
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+tbody td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+tbody tr:hover {
+  background: color-mix(in oklab, var(--brand) 6%, transparent);
+}
+
+/* ---------------------------------
+   Alerts (centered)
+   --------------------------------- */
+.alert {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  text-align: center;
+}
+.alert + .alert { margin-top: var(--space-3); }
+.alert-info    { border-color: color-mix(in oklab, var(--info) 30%, var(--border));    background: color-mix(in oklab, var(--info) 14%, var(--surface)); }
+.alert-success { border-color: color-mix(in oklab, var(--success) 30%, var(--border)); background: color-mix(in oklab, var(--success) 14%, var(--surface)); }
+.alert-warning { border-color: color-mix(in oklab, var(--warning) 30%, var(--border)); background: color-mix(in oklab, var(--warning) 14%, var(--surface)); }
+.alert-danger  { border-color: color-mix(in oklab, var(--danger) 30%, var(--border));  background: color-mix(in oklab, var(--danger) 14%, var(--surface)); }
+
+/* ---------------------------------
+   Header / Nav (centered)
+   --------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: saturate(1.2) blur(6px);
+  text-align: center;
+  width: 100%;
+}
+.site-header .inner {
+  max-width: var(--container-wide);
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center; /* center header content */
+  gap: var(--space-3);
+}
+.nav { display: flex; gap: var(--space-3); align-items: center; justify-content: center; }
+.nav a { color: var(--text); font-weight: 600; }
+.nav a.active { color: var(--brand); }
+
+/* Theme toggle button */
+.theme-toggle {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--radius-pill);
+  margin-left: var(--space-4);
+}
+
+/* ---------------------------------
+   Footer (centered)
+   --------------------------------- */
 footer {
-  margin-top: 2rem;
-  padding-top: 1rem;
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
   border-top: 1px solid var(--border);
   text-align: center;
 }
 
-/* -------------------------
+/* ---------------------------------
    Small-screen polish
-   ------------------------- */
+   --------------------------------- */
 @media (max-width: 480px) {
-  body {
-    padding: 0.75rem;
-  }
+  body { padding: var(--space-3); }
   .container {
-    padding: 1.25rem 1rem;
-    margin: 1rem auto;
+    padding: var(--space-6) var(--space-4);
+    margin: var(--space-4) auto;
+  }
+  .img-avatar { width: 140px; height: 140px; }
+}
+
+/* ---------------------------------
+   Print styles (centered)
+   --------------------------------- */
+@media print {
+  :root {
+    --bg: #fff; --surface: #fff; --surface-2: #fff;
+    --text: #000; --muted: #444; --border: #ddd; --brand: #000; --brand-strong: #000;
+  }
+  body { background: #fff; padding: 0; display: block; text-align: center; }
+  .site-header, .theme-toggle { display: none !important; }
+  .container {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    margin: 0 auto;
+    max-width: 100%;
+    text-align: center;
   }
 }
-``
