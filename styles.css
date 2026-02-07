@@ -1,0 +1,232 @@
+/* =========================================================
+   Activity #2 — Styling with CSS
+   This stylesheet implements Steps 2–6 from the assignment.
+   (Base reset + container + headings/text + lists + image + links)
+   ========================================================= */
+
+/* -------------------------
+   Step 2: Page background & base font
+   ------------------------- */
+:root {
+  /* Friendly, accessible color system */
+  --bg: #f7f9fc;              /* light page background */
+  --surface: #ffffff;          /* cards/containers */
+  --text: #1f2937;             /* primary text */
+  --muted: #6b7280;            /* secondary text */
+  --brand: #2563eb;            /* link / accent (blue) */
+  --brand-strong: #1e40af;     /* darker hover state */
+  --border: #e5e7eb;           /* subtle borders */
+  --shadow: 0 8px 20px rgba(2, 6, 23, 0.08);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* Improves font rendering and line-height rhythm */
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;                             /* remove default margin */
+  padding: 1rem;                         /* breathing room at edges */
+  font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;                      /* improve readability */
+}
+
+/* Provide a pleasant reading width for long text */
+p {
+  max-width: 65ch;
+  color: var(--text);
+}
+
+/* -------------------------
+   Step 3: Main container
+   (Remember to wrap your body content in: <div class="container"> ... </div>)
+   ------------------------- */
+.container {
+  max-width: 960px;                      /* limit width for readability */
+  margin: 2rem auto;                     /* center on page */
+  background: var(--surface);            /* white card */
+  padding: 2rem 2.25rem;                 /* internal spacing */
+  border-radius: 14px;                   /* rounded corners */
+  box-shadow: var(--shadow);             /* soft shadow */
+  border: 1px solid var(--border);       /* subtle edge definition */
+}
+
+/* Add consistent spacing between major sections */
+section + section {
+  margin-top: 2rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border);
+}
+
+/* -------------------------
+   Step 4: Headings & text
+   ------------------------- */
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  margin: 0; /* reset */
+  color: var(--text);
+}
+
+/* Make the main heading stand out with a color and spacing */
+h1 {
+  color: var(--brand);                   /* accent color per instructions */
+  font-size: clamp(1.8rem, 2.5vw + 1rem, 2.6rem);
+  letter-spacing: 0.3px;
+  margin-bottom: 0.75rem;                /* spacing under h1 */
+}
+
+/* Secondary heading spacing */
+h2 {
+  font-size: clamp(1.25rem, 1.2vw + 1rem, 1.75rem);
+  color: var(--text);
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;                 /* spacing under h2 */
+}
+
+/* Improve paragraph readability */
+p {
+  font-size: 1rem;
+  margin: 0.5rem 0 1rem;
+}
+
+/* Optional: small, muted helper text */
+.small,
+footer {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* -------------------------
+   Step 5: List section
+   ------------------------- */
+ul,
+ol {
+  padding-left: 1.25rem;                 /* a little left padding */
+  margin: 0.5rem 0 1rem;
+}
+
+li {
+  margin-bottom: 0.4rem;                 /* spacing between list items */
+}
+
+/* Modern “check” list style (optional: add class="checklist" to your UL) */
+.checklist {
+  list-style: none;
+  padding-left: 0;
+}
+.checklist li {
+  position: relative;
+  padding-left: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+.checklist li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  color: var(--brand);
+  font-weight: 700;
+}
+
+/* -------------------------
+   Step 5 (image): Image styling
+   ------------------------- */
+/* Generic responsive image */
+img {
+  max-width: 100%;
+  height: auto;                          /* responsive */
+  display: block;                        /* enables centering via margin */
+}
+
+/* Centered, rounded “profile/featured” image */
+.figure,
+.img-center {
+  text-align: center;
+}
+
+.img-rounded {
+  border-radius: 12px;                   /* rounded corners */
+  border: 2px solid var(--border);       /* subtle border */
+  margin: 1rem auto;                     /* center horizontally */
+  box-shadow: 0 4px 12px rgba(2, 6, 23, 0.06);
+}
+
+/* Circular avatar style (use class="img-avatar" for square images) */
+.img-avatar {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--surface);
+  outline: 2px solid var(--brand);       /* accent ring */
+  margin: 1rem auto;
+  box-shadow: 0 6px 16px rgba(2, 6, 23, 0.10);
+}
+
+/* -------------------------
+   Step 6: Link styling
+   ------------------------- */
+a {
+  color: var(--brand);                    /* link color */
+  text-decoration: none;                  /* remove underline by default */
+  font-weight: 600;
+}
+a:hover,
+a:focus-visible {
+  text-decoration: underline;             /* underline on hover */
+  color: var(--brand-strong);
+}
+a:active {
+  opacity: 0.9;
+}
+
+/* Optional: button-like link (add class="btn") */
+a.btn {
+  display: inline-block;
+  background: var(--brand);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: transform 120ms ease, background 120ms ease;
+}
+a.btn:hover,
+a.btn:focus-visible {
+  background: var(--brand-strong);
+  transform: translateY(-1px);
+}
+
+/* -------------------------
+   Footer (mentioned in final checks)
+   ------------------------- */
+footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+/* -------------------------
+   Small-screen polish
+   ------------------------- */
+@media (max-width: 480px) {
+  body {
+    padding: 0.75rem;
+  }
+  .container {
+    padding: 1.25rem 1rem;
+    margin: 1rem auto;
+  }
+}
+``
